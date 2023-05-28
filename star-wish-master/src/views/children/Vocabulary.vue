@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-button type="success">新增</el-button>
+    <el-button type="success" @click="callDialog()">新增</el-button>
     <el-table :data="specialty" style="width: 100%">
       <el-table-column label="名称" prop="item_name" />
       <el-table-column label="描述" prop="item_description" />
@@ -29,7 +29,7 @@
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="dialogFormVisible = false">取消</el-button>
-          <el-button type="primary" @click="dialogFormVisible = false"> 确认 </el-button>
+          <el-button type="primary" @click="handleSubmit()"> 确认 </el-button>
         </span>
       </template>
     </el-dialog>
@@ -44,9 +44,11 @@ export default {
   setup() {
     const dialogFormVisible = ref(false)
     const form = reactive({
+      item_index: 0,
       item_name: '',
       item_description: '',
       item_detail: '',
+      phoneNum: '',
     })
     // 新增信息
     const callDialog = () => {
@@ -63,13 +65,96 @@ export default {
       // 浅拷贝
       Object.assign(form, row)
     }
+    const alterSpecialty = (obj) => {
+      console.log(obj)
+      axios
+        .put('http://localhost:8085/msg/alterSpecialty', JSON.stringify(obj), {
+          headers: {
+            Authorization: 'Bearer ' + localStorage.getItem('token'),
+            'Content-Type': 'application/json',
+          },
+        })
+        .then((res) => {
+          console.log(res)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    }
+    const setSpecialty = (obj) => {
+      axios
+        .post('http://localhost:8085/msg/setSpecialty', JSON.stringify(obj), {
+          headers: {
+            Authorization: 'Bearer ' + localStorage.getItem('token'),
+            'Content-Type': 'application/json',
+          },
+        })
+        .then((res) => {
+          console.log(res)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    }
+    const phone = ref('')
+    const handleSubmit = () => {
+      dialogFormVisible.value = false
+      if (action.value == 'add') {
+        console.log(form)
+        console.log(phone.value)
 
+        let obj = {
+          item_index: form.item_index,
+          item_name: form.item_name,
+          item_description: form.item_description,
+          item_detail: form.item_detail,
+          phoneNum: phone.value,
+        }
+        setSpecialty(obj)
+      } else {
+        console.log(form)
+        let obj = {
+          item_index: form.item_index,
+          item_name: form.item_name,
+          item_description: form.item_description,
+          item_detail: form.item_detail,
+          phoneNum: form.phoneNum,
+        }
+        console.log(form.item_index)
+        alterSpecialty(obj)
+      }
+    }
+
+    const deleteSpecialty = (item_index) => {
+      axios
+        .delete('http://localhost:8085/msg/deleteSpecialty/' + item_index, {
+          headers: {
+            Authorization: 'Bearer ' + localStorage.getItem('token'),
+            'Content-Type': 'application/json',
+          },
+        })
+        .then((response) => {
+          console.log(response)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    }
+    const handleDelete = (row) => {
+      console.log(row.item_name)
+      deleteSpecialty(row.item_index)
+    }
     return {
       dialogFormVisible,
       callDialog,
       form,
       handleEdit,
       action,
+      handleSubmit,
+      alterSpecialty,
+      phone,
+      deleteSpecialty,
+      handleDelete,
     }
   },
   data() {
@@ -109,6 +194,7 @@ export default {
           console.log(response)
           let resData = Object.values(response.data)
           this.specialty = resData
+          this.phone = resData[0].phoneNum
         })
         .catch((error) => {
           console.log(error)

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+
 @Slf4j
 @Service
 public class SceneryServiceImpl extends ServiceImpl<SceneryMapper, Scenery> implements SceneryService {
@@ -34,21 +35,21 @@ public class SceneryServiceImpl extends ServiceImpl<SceneryMapper, Scenery> impl
 
     @Override
     public Scenery findByPhone(String phoneNum) {
-        return null;
+        return sceneryMapper.findByPhone(phoneNum);
     }
 
     @Override
     public void setScenery(Scenery scenery) {
-
+        sceneryMapper.setScenery(scenery);
     }
 
     @Override
     public void alterScenery(Scenery scenery) {
-
+        sceneryMapper.alterScenery(scenery);
     }
 
     @Override
     public void deleteScenery(int item_index) {
-
+        sceneryMapper.deleteScenery(item_index);
     }
 }

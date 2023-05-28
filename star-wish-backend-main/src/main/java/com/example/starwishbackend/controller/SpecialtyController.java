@@ -1,6 +1,8 @@
 package com.example.starwishbackend.controller;
 
+import com.example.starwishbackend.common.R;
 import com.example.starwishbackend.domain.Introduction;
+import com.example.starwishbackend.domain.Scenery;
 import com.example.starwishbackend.domain.Specialty;
 import com.example.starwishbackend.service.IntroductionService;
 import com.example.starwishbackend.service.SpecialtyService;
@@ -10,8 +12,7 @@ import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -46,5 +47,29 @@ public class SpecialtyController {
         }
 
         return list;
+    }
+    @PostMapping("/msg/setSpecialty")
+    public R<Object> setScenery(@RequestBody Specialty specialty) {
+        log.info(specialty.getPhoneNum());
+        specialtyService.setSpecialty(specialty);
+        log.info("存入新记录：{}", specialty.getItem_name());
+
+        return R.success(null);
+    }
+
+    @PutMapping("/msg/alterSpecialty")
+    public R<Object> alterScenery(@RequestBody Specialty specialty) {
+        specialtyService.alterSpecialty(specialty);
+        log.info("修改记录为：{}", specialty.getItem_name());
+
+        return R.success(null);
+    }
+
+    @DeleteMapping("/msg/deleteSpecialty/{item_index}")
+    public R<Object> deleteSpecialty(@PathVariable int item_index) {
+        specialtyService.deleteSpecialty(item_index);
+        log.info("该标签已删除：{}", item_index);
+
+        return R.success(null);
     }
 }

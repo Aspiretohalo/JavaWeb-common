@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+
 @Slf4j
 @Service
 public class SpecialtyServiceImpl extends ServiceImpl<SpecialtyMapper, Specialty> implements SpecialtyService {
@@ -35,22 +36,22 @@ public class SpecialtyServiceImpl extends ServiceImpl<SpecialtyMapper, Specialty
 
     @Override
     public Specialty findByPhone(String phoneNum) {
-        return null;
+        return specialtyMapper.findByPhone(phoneNum);
     }
 
     @Override
     public void setSpecialty(Specialty specialty) {
-
+        specialtyMapper.setSpecialty(specialty);
     }
 
     @Override
     public void alterSpecialty(Specialty specialty) {
-
+        specialtyMapper.alterSpecialty(specialty);
     }
 
     @Override
     public void deleteSpecialty(int item_index) {
-
+        specialtyMapper.deleteSpecialty(item_index);
     }
 }
 

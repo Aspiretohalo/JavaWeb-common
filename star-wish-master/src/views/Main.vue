@@ -141,7 +141,7 @@ export default {
 
 .bottom {
   background-color: #fff;
-  height: 1000px;
+  height: 1100px;
   .el-menu-vertical-demo:not(.el-menu--collapse) {
     width: 300px;
     min-height: 400px;

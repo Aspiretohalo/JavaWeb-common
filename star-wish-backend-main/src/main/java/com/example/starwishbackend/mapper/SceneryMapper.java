@@ -15,11 +15,11 @@ public interface SceneryMapper extends BaseMapper<Scenery> {
     @Select(value = "SELECT * FROM home_scenery WHERE phoneNum=#{phoneNum}")
     List<Map<String, Scenery>> queryScenery(String phoneNum);
 
-    @Select(value = "insert into home_scenery (item_name,item_description,item_detail) values(#{item_name},#{item_description},#{item_detail})")
+    @Select(value = "insert into home_scenery (item_name,item_description,item_detail,phoneNum) values(#{item_name},#{item_description},#{item_detail},#{phoneNum})")
     void setScenery(Scenery scenery);
 
     @Select(value = "update home_scenery set item_name=#{item_name},item_description=#{item_description},item_detail=#{item_detail} where item_index=#{item_index}")
-    void alterScenery(Specialty specialty);
+    void alterScenery(Scenery scenery);
 
     @Select(value = "delete from home_scenery WHERE item_index=#{item_index}")
     void deleteScenery(Integer item_index);

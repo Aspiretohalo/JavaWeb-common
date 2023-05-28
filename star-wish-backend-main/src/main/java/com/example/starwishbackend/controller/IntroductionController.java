@@ -11,10 +11,7 @@ import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -48,7 +45,31 @@ public class IntroductionController {
             claims2 = JwtUtils.parseJWT(jwt2[1]);
             list = introductionService.getIntroduction((String) claims2.get("phoneNum"));
         }
-
         return list;
+    }
+
+    @PostMapping("/msg/setIntroduction")
+    public R<Object> setIntroduction(@RequestBody Introduction introduction) {
+        log.info(introduction.getPhoneNum());
+        introductionService.setIntroduction(introduction);
+        log.info("存入新记录：{}", introduction.getItem_name());
+
+        return R.success(null);
+    }
+
+    @PutMapping("/msg/alterIntroduction")
+    public R<Object> alterIntroduction(@RequestBody Introduction introduction) {
+        introductionService.alterIntroduction(introduction);
+        log.info("修改记录为：{}", introduction.getItem_name());
+
+        return R.success(null);
+    }
+
+    @DeleteMapping("/msg/deleteIntroduction/{item_index}")
+    public R<Object> deleteCategory(@PathVariable int item_index) {
+        introductionService.deleteIntroduction(item_index);
+        log.info("该标签已删除：{}", item_index);
+
+        return R.success(null);
     }
 }

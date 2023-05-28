@@ -5,7 +5,7 @@ import Treasure from '../views/children/Treasure.vue'
 import Vocabulary from '../views/children/Vocabulary.vue'
 import Plan from '../views/children/Plan.vue'
 import Personal from '../views/children/Personal.vue'
-import Settings from '../views/children/Settings.vue'
+// import Settings from '../views/children/Settings.vue'
 import { showFailToast } from 'vant';
 
 
@@ -41,10 +41,10 @@ const router = createRouter({
 
             ]
         },
-        {
-            path: '/settings',
-            component: Settings,
-        },
+        // {
+        //     path: '/settings',
+        //     component: Settings,
+        // },
 
 
         {

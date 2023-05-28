@@ -1,5 +1,7 @@
 package com.example.starwishbackend.controller;
 
+import com.example.starwishbackend.common.R;
+import com.example.starwishbackend.domain.Introduction;
 import com.example.starwishbackend.domain.Scenery;
 import com.example.starwishbackend.domain.Specialty;
 import com.example.starwishbackend.service.SceneryService;
@@ -10,8 +12,7 @@ import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -45,5 +46,29 @@ public class SceneryController {
         }
 
         return list;
+    }
+    @PostMapping("/msg/setScenery")
+    public R<Object> setScenery(@RequestBody Scenery scenery) {
+        log.info(scenery.getPhoneNum());
+        sceneryService.setScenery(scenery);
+        log.info("存入新记录：{}", scenery.getItem_name());
+
+        return R.success(null);
+    }
+
+    @PutMapping("/msg/alterScenery")
+    public R<Object> alterScenery(@RequestBody Scenery scenery) {
+       sceneryService.alterScenery(scenery);
+        log.info("修改记录为：{}", scenery.getItem_name());
+
+        return R.success(null);
+    }
+
+    @DeleteMapping("/msg/deleteScenery/{item_index}")
+    public R<Object> deleteScenery(@PathVariable int item_index) {
+        sceneryService.deleteScenery(item_index);
+        log.info("该标签已删除：{}", item_index);
+
+        return R.success(null);
     }
 }

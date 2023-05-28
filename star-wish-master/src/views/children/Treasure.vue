@@ -21,7 +21,6 @@
       <el-table-column align="right">
         <template #default="scope">
           <el-button type="primary" @click="handleEdit(scope.row)" plain>编辑</el-button>
-
           <el-button type="danger" plain @click="handleDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
@@ -42,7 +41,7 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false"> 确认 </el-button>
+        <el-button type="primary" @click="handleSubmit()"> 确认 </el-button>
       </span>
     </template>
   </el-dialog>
@@ -58,10 +57,13 @@ export default {
   setup() {
     const dialogFormVisible = ref(false)
     const form = reactive({
+      item_index: 0,
       item_name: '',
       item_description: '',
       item_detail: '',
+      phoneNum: '',
     })
+
     // 新增信息
     const callDialog = () => {
       action.value = 'add'
@@ -78,12 +80,96 @@ export default {
       Object.assign(form, row)
     }
 
+    const alterIntroduction = (obj) => {
+      console.log(obj)
+      axios
+        .put('http://localhost:8085/msg/alterIntroduction', JSON.stringify(obj), {
+          headers: {
+            Authorization: 'Bearer ' + localStorage.getItem('token'),
+            'Content-Type': 'application/json',
+          },
+        })
+        .then((res) => {
+          console.log(res)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    }
+    const setIntroduction = (obj) => {
+      axios
+        .post('http://localhost:8085/msg/setIntroduction', JSON.stringify(obj), {
+          headers: {
+            Authorization: 'Bearer ' + localStorage.getItem('token'),
+            'Content-Type': 'application/json',
+          },
+        })
+        .then((res) => {
+          console.log(res)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    }
+    const phone = ref('')
+    const handleSubmit = () => {
+      dialogFormVisible.value = false
+      if (action.value == 'add') {
+        console.log(form)
+        console.log(phone.value)
+
+        let obj = {
+          item_index: form.item_index,
+          item_name: form.item_name,
+          item_description: form.item_description,
+          item_detail: form.item_detail,
+          phoneNum: phone.value,
+        }
+        setIntroduction(obj)
+      } else {
+        console.log(form)
+        let obj = {
+          item_index: form.item_index,
+          item_name: form.item_name,
+          item_description: form.item_description,
+          item_detail: form.item_detail,
+          phoneNum: form.phoneNum,
+        }
+        console.log(form.item_index)
+        alterIntroduction(obj)
+      }
+    }
+
+    const deleteIntroduction = (item_index) => {
+      axios
+        .delete('http://localhost:8085/msg/deleteIntroduction/' + item_index, {
+          headers: {
+            Authorization: 'Bearer ' + localStorage.getItem('token'),
+            'Content-Type': 'application/json',
+          },
+        })
+        .then((response) => {
+          console.log(response)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    }
+    const handleDelete = (row) => {
+      console.log(row.item_name)
+      deleteIntroduction(row.item_index)
+    }
     return {
       dialogFormVisible,
       callDialog,
       form,
       handleEdit,
       action,
+      handleSubmit,
+      alterIntroduction,
+      phone,
+      deleteIntroduction,
+      handleDelete,
     }
   },
   data() {
@@ -108,6 +194,8 @@ export default {
           console.log(response)
           let resData = Object.values(response.data)
           this.introduction = resData
+          this.phone = resData[0].phoneNum
+          // console.log(this.phone)
         })
         .catch((error) => {
           console.log(error)

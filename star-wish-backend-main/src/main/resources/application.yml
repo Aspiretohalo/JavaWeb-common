@@ -1,0 +1,10 @@
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+server:
+  port: 8085
+spring:
+  datasource:
+    username: root
+    password: admin123
+    url: jdbc:mysql://localhost:3306/javaweb-final?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
